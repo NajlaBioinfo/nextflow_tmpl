@@ -1,0 +1,6 @@
+.nextflow.history
+.nextflow.log*
+.nextflow
+
+work
+results
