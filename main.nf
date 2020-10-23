@@ -63,7 +63,6 @@ process Greeting {
 }
 
 params.srainput = "$baseDir/${params.data}sra/sraIds.txt"
-params.fastqinput="$baseDir/${params.data}fastq/"
 sraIds = Channel.create()
 Channel
     .from(file(params.srainput))
@@ -94,16 +93,26 @@ process SraDownload {
     """
 }
 
+
+params.prefinput = "$baseDir/${params.data}sra/sraIds.txt"
+params.fastqinput="$baseDir/${params.data}fastq/"
+prefetchIds = Channel.create()
+Channel
+    .from(file(params.prefinput))
+    .splitCsv(sep:'\t', header: true)
+    .map { it.Run_s }
+    .into(prefetchIds)
+
 process FastqDumpDocker {
     echo true
 	publishDir "${params.output}"
 	container 'najlabioinfo/nextflowtuto:latest'
 
    input:
-    params.srainput
+    params.prefinput
     params.output
     params.fastqinput
-    val idsra from sraIds
+    val idsra from prefetchIds
 
     script:
     """
