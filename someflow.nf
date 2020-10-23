@@ -17,4 +17,5 @@ workflow pipFlow {
     // workflow implementation
     main:
       greeting(username,output,data)
+      sayingbye(username)
 }

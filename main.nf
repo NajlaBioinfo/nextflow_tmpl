@@ -3,7 +3,6 @@
 
  
 
-
 VERSION="0.1.0"
 
 log.info "===================================================================="
@@ -17,8 +16,12 @@ params.output = "./output"
 params.data = "./data"
 params.username = "someusername"
 
-
+/*Hardware params*/
 threads = params.threads
+
+
+
+
 
 
 if(params.help) {
@@ -56,5 +59,73 @@ process Greeting {
     script:
     """
     python $baseDir/bin/argcheck.py ${params.username} $baseDir/${params.data} $baseDir/${params.output}
+    """
+}
+
+params.srainput = "$baseDir/${params.data}sra/sraIds.txt"
+params.fastqinput="$baseDir/${params.data}fastq/"
+sraIds = Channel.create()
+Channel
+    .from(file(params.srainput))
+    .splitCsv(sep:'\t', header: true)
+    .map { it.Run_s }
+    .into(sraIds)
+
+process SraDownload {
+    echo true
+
+    input:
+    params.srainput
+    val id from sraIds
+
+
+    output:
+    println "Reading from:  $params.srainput"
+
+    
+    script:
+    """
+    echo "Step 1/2 Prefetch ...."
+    echo "Downloading .... $id"
+    docker run -t --name $id -v /root/ncbi/public/sra/ -v $baseDir/${params.data}sra/srafiles/ najlabioinfo/nextflowtuto prefetch ${id}
+    docker cp $id:/root/ncbi/public/sra/${id}.sra $baseDir/${params.data}sra/srafiles/
+    docker stop $id
+    docker rm $id
+    """
+}
+
+process FastqDumpDocker {
+    echo true
+	publishDir "${params.output}"
+	container 'najlabioinfo/nextflowtuto:latest'
+
+   input:
+    params.srainput
+    params.output
+    params.fastqinput
+    val id from sraIds
+
+    script:
+    """
+    echo "Step 2/2 Fastq-dump ...."
+    docker run -t --name $id  najlabioinfo/nextflowtuto  fastq-dump -X 5 -Z ${id} > $params.fastqinput/$id".fastq" 
+    docker stop $id
+    docker rm $id
+    """
+}
+
+
+process SayingBye {
+    echo true
+
+    input:
+    params.username
+
+    output:
+    println "Thank you - $params.username - for using  Nextflow template \nMore infos : bhndevtools@gmail.com"
+
+    script:
+    """
+    echo "Goodbye"
     """
 }

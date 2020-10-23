@@ -1,9 +1,9 @@
-#!/Users/remindNahool/opt/anaconda3/bin/python
+#!/usr/bin/python
 
 import argparse
 import sys
 import os
-import pathlib
+#import pathlib
 
 def isitdir(directory):
     if (os.path.isdir(directory)) == True:
@@ -71,9 +71,9 @@ def check_it():
         sys.exit('Usage: python %s --help' % sys.argv[0])
     
     #Footer
-    print("--------------------------------------------------------------------------------------------")
-    print("Thank you for using  argument check script \nMore infos : bhndevtools@gmail.com")
-    print("--------------------------------------------------------------------------------------------")
+    #print("--------------------------------------------------------------------------------------------")
+    #print("Thank you for using  argument check script \nMore infos : bhndevtools@gmail.com")
+    #print("--------------------------------------------------------------------------------------------")
 
 
 #Launch check arguments
