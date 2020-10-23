@@ -103,14 +103,14 @@ process FastqDumpDocker {
     params.srainput
     params.output
     params.fastqinput
-    val id from sraIds
+    val idsra from sraIds
 
     script:
     """
     echo "Step 2/2 Fastq-dump ...."
-    docker run -t --name $id  najlabioinfo/nextflowtuto  fastq-dump -X 5 -Z ${id} > $params.fastqinput/$id".fastq" 
-    docker stop $id
-    docker rm $id
+    docker run -t --name $idsar  najlabioinfo/nextflowtuto  fastq-dump -X 5 -Z ${idsra} > $params.fastqinput/$idsra".fastq" 
+    docker stop $idsra
+    docker rm $idsra
     """
 }
 
