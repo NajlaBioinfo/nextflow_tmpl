@@ -117,9 +117,9 @@ process FastqDumpDocker {
     script:
     """
     echo "Step 2/2 Fastq-dump ...."
-    docker run -t --name $idsra  najlabioinfo/nextflowtuto  fastq-dump -X 5 -Z ${idsra} > $params.fastqinput/$idsra".fastq" 
-    docker stop $idsra
-    docker rm $idsra
+    docker run -t --name $idsra"f"  najlabioinfo/nextflowtuto  fastq-dump -X 5 -Z ${idsra} > $params.fastqinput/$idsra".fastq" 
+    docker stop $idsra"f"
+    docker rm $idsra"f"
     """
 }
 
