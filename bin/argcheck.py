@@ -40,7 +40,7 @@ def check_it():
         outdir = sys.argv[3]
 
         print("\n************************************************")
-        print("Hello " + username + " from NajlaBH !! ")
+        print("Hello " + username + " from NajlaBioinfo !! ")
         print("************************************************")
         
         #Input dir
